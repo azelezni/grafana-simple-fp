@@ -1,0 +1,19 @@
+{{- $alertGroupsConfig := .Files.Glob "alert-groups/**.yaml" -}}
+{{- range $path, $_ := $alertGroupsConfig }}
+{{- $data := fromYaml ($.Files.Get $path) }}
+{{- if $data }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana-simple-fp.fullname" $ }}-{{ regexReplaceAll ".yaml" (base $path) "" }}-{{ $data.name }}
+  labels:
+    {{- with $.Values.alertGroupLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "grafana-simple-fp.labels" $ | nindent 4 }}
+data:
+  rules.yaml: |
+    groups: {{ toYaml (list $data) | nindent 6 }}
+---
+{{- end }}
+{{- end }}

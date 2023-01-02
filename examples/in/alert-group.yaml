@@ -1,0 +1,23 @@
+groups:
+  - name: my-awesome-group
+    folder: AwesomeGroup
+    interval: 30s
+    rules:
+      - title: my-awesome-rule
+        labels:
+          opsgenie: my-awesome-group
+        annotations:
+          description: Pod {{ $labels.pod }} in cluster {{ $labels.cluster }} is down!
+          summary: Backend is down!
+        executionState:
+          noData: Alerting # NoData|Alerting|OK
+          execErr: Error   # Error|Alerting|OK
+        timerange:
+          from: 600
+          to: 0
+        query:
+          type: prometheus
+          datasource: prometheus
+          expression: count by (cluster, pod) (up{cluster="foobar", namespace="default", pod=~"backend-.+"})
+        condition:
+          expression: last() < 1 for(5m)

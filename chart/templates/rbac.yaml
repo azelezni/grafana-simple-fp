@@ -1,0 +1,34 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "grafana-simple-fp.fullname" . }}
+  labels: {{ include "grafana-simple-fp.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - delete
+      - watch
+      - list
+      - get
+      - patch
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "grafana-simple-fp.fullname" . }}
+  labels: {{ include "grafana-simple-fp.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "grafana-simple-fp.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "grafana-simple-fp.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

@@ -1,0 +1,11 @@
+*.pyc
+
+**/bdlogs
+**/venv
+**/__pycache__
+**/node_modules
+**/.vs
+**/.idea
+**/.git
+
+Dockerfile

@@ -1,0 +1,58 @@
+name: Grafana Simple FP.
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        run: docker build -f Dockerfile -t ghcr.io/${{ github.repository_owner }}/grafana-simple-fp:${{ github.sha }} .
+        if: github.event_name == 'push'
+
+      - name: Docker login
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        if: github.event_name == 'push'
+
+      - name: Push
+        run: docker push ghcr.io/${{ github.repository_owner }}/grafana-simple-fp:${{ github.sha }}
+        if: github.event_name == 'push'
+
+  Semver:
+    runs-on: ubuntu-latest
+    container: marcelocorreia/semver
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: version bump
+        run: |
+          CURRENT = $(git tag -l --sort=-v:refname)
+          PATCHED = semver -c -i patch $CURRENT
+          git tag ${PATCHED}

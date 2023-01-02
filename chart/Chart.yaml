@@ -1,0 +1,13 @@
+apiVersion: v2
+
+name: grafana-simple-fp
+description: Grafana Simple File Provisioning
+
+type: application
+
+version: 0.0.1
+appVersion: 0.0.1
+
+maintainers:
+  - name: azelezni
+    email: alex88zel@gmail.com

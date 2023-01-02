@@ -1,0 +1,98 @@
+# Default values for workload.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ''
+fullnameOverride: ''
+
+replicaCount: 1
+
+deploymentStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+  #  maxSurge: 10
+  #  maxUnavailable: 3
+
+image:
+  repository: ghcr.io/azelezni/grafana-simple-fp
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+#  tag: latest
+
+imagePullSecrets: []
+
+revisionHistoryLimit: 3
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ''
+
+rbac:
+  create: true
+
+commonLabels: {}
+#  app.kubernetes.io/component: ''
+#  app.kubernetes.io/part-of: ''
+
+# labels added to alert-group-config created from alert-groups folder
+alertGroupLabels:
+  grafana-simple-fp: federator
+
+# labels added to configmaps created after converting alert-group-config to grafana file provisioning
+alertGroupTargetLabels:
+  grafana_alert: federator
+
+podAnnotations: {}
+
+podSecurityContext: {}
+#  fsGroup: 2000
+
+securityContext: {}
+#  capabilities:
+#    drop:
+#    - ALL
+#  readOnlyRootFilesystem: true
+#  runAsNonRoot: true
+#  runAsUser: 1000
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+terminationGracePeriodSeconds: 30
+
+extraEnv: {}
+#  FOO: "bar"
+
+extraEnvFrom: []
+
+extraVolumes: []
+
+extraVolumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+topologySpreadConstraints: []
+
+schedulerName: ""
+
+affinity: {}
+
+lifecycle: {}
+#  postStart:
+#    exec:
+#      command: []
+#  preStop:
+#    exec:
+#      command: []
