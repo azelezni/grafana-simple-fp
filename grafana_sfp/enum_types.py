@@ -32,7 +32,4 @@ class RelativeTimeRange:
     to_: int
 
     def to_dict(self):
-        return dict(**{
-            'from': self.from_,
-            'to': self.to_
-        })
+        return dict(**{"from": self.from_, "to": self.to_})

@@ -2,10 +2,10 @@ import logging
 
 import yaml
 
-from kubernetes.client.models import V1ConfigMapList, V1ConfigMap
-from kubernetes.client import V1ObjectMeta, exceptions
 from kubernetes import config, client, watch
+from kubernetes.client import V1ObjectMeta, exceptions
 from kubernetes.client.api import CoreV1Api
+from kubernetes.client.models import V1ConfigMapList, V1ConfigMap
 
 from grafana_sfp.constants import GRAFANA_ALERT_CONFIGMAP_PREFIX, CONFIGMAP_ALERT_CONFIG_KEY
 from grafana_sfp.enum_types import KubernetesEventTypes

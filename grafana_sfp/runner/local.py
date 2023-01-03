@@ -1,7 +1,6 @@
+import glob
 import logging
 import os
-
-from glob import glob
 
 import yaml
 
@@ -21,10 +20,10 @@ class LocalRunner(BaseRunner):
         self.output_path = output_path
 
     def load_config(self) -> None:
-        for path in glob(self.config_path):
+        for path in glob.glob(self.config_path):
             try:
                 logger.debug(f'reading config file at path: {path}')
-                with open(path, 'r') as infile:
+                with open(path) as infile:
                     self.alert_config[path] = yaml.safe_load(infile)
             except yaml.YAMLError:
                 logger.exception(f'Something went wrong when trying to read config file {path}')

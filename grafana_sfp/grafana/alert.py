@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import dataclasses
-import logging
-import hashlib
 import enum
-
-from typing import Optional, Union
+import hashlib
+import logging
 
 from grafana_sfp.alert.config import AlertGroupConfig, AlertConfig, AlertQueryConfig, AlertQueryConfigTypes
 from grafana_sfp.enum_types import AlertExecErrState, AlertNoDataState, RelativeTimeRange
@@ -73,7 +71,7 @@ class GrafanaExpressionConditionModel:
 @dataclasses.dataclass
 class GrafanaExpressionDataModelSettings:
     mode: AlertReduceMode
-    replace_with_value: Optional[int]
+    replace_with_value: int | None
 
     @classmethod
     def from_alert_condition(cls, alert_condition: AlertCondition) -> GrafanaExpressionDataModelSettings:
@@ -101,9 +99,9 @@ class GrafanaExpressionDataModelSettings:
 class GrafanaExpressionDataModel:
     type_: GrafanaExpressionDataModelTypes
     expression: str
-    reducer: Optional[str]
-    conditions: Optional[list[GrafanaExpressionConditionModel]]
-    settings: Optional[GrafanaExpressionDataModelSettings]
+    reducer: str | None
+    conditions: list[GrafanaExpressionConditionModel] | None
+    settings: GrafanaExpressionDataModelSettings | None
 
     @property
     def type(self):
@@ -206,7 +204,7 @@ class ElasticSearchQueryDataModelMetrics:
 
 @dataclasses.dataclass
 class ElasticSearchQueryDataModel:
-    alias: Optional[str]
+    alias: str | None
     bucket_aggs: list[ElasticSearchQueryDataModelBucketAggs]
     metrics: list[ElasticSearchQueryDataModelMetrics]
     query: str
@@ -250,7 +248,7 @@ class GrafanaAlertRuleData:
     ref_id: str
     datasource_uid: str
     relative_time_range: RelativeTimeRange
-    model: Union[PrometheusQueryDataModel, GrafanaExpressionDataModel]
+    model: PrometheusQueryDataModel | GrafanaExpressionDataModel
 
     @classmethod
     def from_alert_query_config(cls, ref_id: str, alert_config: AlertConfig) -> GrafanaAlertRuleData:
@@ -272,7 +270,7 @@ class GrafanaAlertRuleData:
         )
 
     @classmethod
-    def from_alert_condition_config(cls, alert_query_data: GrafanaAlertRuleData, alert_config: AlertConfig) -> List[GrafanaAlertRuleData]:
+    def from_alert_condition_config(cls, alert_query_data: GrafanaAlertRuleData, alert_config: AlertConfig) -> list[GrafanaAlertRuleData]:
         alert_condition = AlertCondition.from_expression(alert_config.condition.expression)
 
         reduce_ref_id = chr(ord(alert_query_data.ref_id) + 1)

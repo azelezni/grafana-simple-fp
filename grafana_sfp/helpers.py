@@ -9,7 +9,7 @@ class KvDictAppendAction(argparse.Action):
     """
 
     def __call__(self, parser, args, values, option_string=None):
-        assert (len(values) == 1)
+        assert len(values) == 1, 'only 1 value'
         try:
             (k, v) = values[0].split('=', 2)
         except ValueError:
