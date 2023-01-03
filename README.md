@@ -4,6 +4,13 @@ It can be used it either local mode or cluster mode:
 * Local mode - reads yaml files and outputs converted yaml to provided path
 * Cluster mode - watches for configmaps and creates converted configmaps
 
+This is a work in progress, there are several existing issues/missing features:
+* Complete CI pipeline for docker/helm
+* Testing
+* Known issue where the pod restarts when watching for resource changes
+* Better docs, more examples
+* Use finalizers to cleanup configmaps
+
 ## Params
 The parameters are supported:
 
